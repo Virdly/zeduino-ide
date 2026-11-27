@@ -5,18 +5,18 @@
   "description": "Zed-style Arduino IDE: a fast editor with boards, compile/upload, serial monitor, library manager and an AI assistant",
   "author": {
     "name": "ZedArduino",
-    "url": "https://github.com/USERNAME"
+    "url": "https://github.com/Virdly"
   },
   "license": "MIT",
   "main": "dist/main/index.js",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/USERNAME/zeduino-ide.git"
+    "url": "https://github.com/Virdly/zeduino-ide.git"
   },
-  "homepage": "https://github.com/USERNAME/zeduino-ide#readme",
+  "homepage": "https://github.com/Virdly/zeduino-ide#readme",
   "bugs": {
-    "url": "https://github.com/USERNAME/zeduino-ide/issues"
+    "url": "https://github.com/Virdly/zeduino-ide/issues"
   },
   "keywords": [
     "arduino",

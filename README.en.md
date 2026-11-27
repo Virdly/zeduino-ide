@@ -1,6 +1,6 @@
 # ZedArduino IDE
 
-![Build](https://github.com/USERNAME/zeduino-ide/actions/workflows/build.yml/badge.svg)
+![Build](https://github.com/Virdly/zeduino-ide/actions/workflows/build.yml/badge.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-informational)
@@ -47,7 +47,7 @@ Russian UI by default, English available; dark/light/fully custom themes.
 ### From source
 
 ```powershell
-git clone https://github.com/USERNAME/zeduino-ide.git
+git clone https://github.com/Virdly/zeduino-ide.git
 cd zeduino-ide
 npm install
 npm run dev        # development (Vite + Electron)

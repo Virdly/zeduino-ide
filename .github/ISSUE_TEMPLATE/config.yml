@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Документация
-    url: https://github.com/USERNAME/zeduino-ide/tree/main/docs
+    url: https://github.com/Virdly/zeduino-ide/tree/main/docs
     about: Сборка, архитектура, настройка ИИ, публикация
   - name: Вопросы и обсуждения
-    url: https://github.com/USERNAME/zeduino-ide/discussions
+    url: https://github.com/Virdly/zeduino-ide/discussions
     about: Задайте вопрос или поделитесь опытом
   - name: Сообщение об уязвимости
-    url: https://github.com/USERNAME/zeduino-ide/security/advisories/new
+    url: https://github.com/Virdly/zeduino-ide/security/advisories/new
     about: Приватное сообщение о проблеме безопасности (не публичный issue)

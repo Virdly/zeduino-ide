@@ -3,9 +3,9 @@ ZedArduino IDE — как выложить на GitHub
 
 Кратко (подробно — docs/PUBLISHING.md):
 
-1. Замените USERNAME
-   В package.json (repository/homepage/bugs/author) и в README.md/README.en.md (ссылки и бейджи)
-   замените USERNAME на ваш GitHub-логин.
+1. Логин и репозиторий уже указаны: Virdly/zeduino-ide
+   Если репозиторий будет называться иначе или вы форкнете проект — замените "Virdly"
+   в package.json, README.md, README.en.md, SECURITY.md и .github/ISSUE_TEMPLATE/config.yml.
 
 2. Создайте репозиторий на GitHub
    Например: zeduino-ide (пустой, без README/.gitignore).

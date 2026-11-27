@@ -16,7 +16,7 @@
 Используйте приватный GitHub Security Advisory:
 
 ```text
-https://github.com/USERNAME/zeduino-ide/security/advisories/new
+https://github.com/Virdly/zeduino-ide/security/advisories/new
 ```
 
 Либо раздел **Security → Report a vulnerability** в репозитории. Если приватный канал недоступен, свяжитесь с мейнтейнером через GitHub (профиль в `package.json`) без публичного раскрытия деталей.

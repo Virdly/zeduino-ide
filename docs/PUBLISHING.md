@@ -2,28 +2,30 @@
 
 Пошаговая инструкция для первого релиза ZedArduino IDE 1.0.0. Сборка описана в [BUILDING](BUILDING.md), лицензии — в [THIRD-PARTY-NOTICES](../THIRD-PARTY-NOTICES.md), безопасность — в [SECURITY](../SECURITY.md).
 
-## 1. Замените placeholder `USERNAME`
+## 1. Логин и имя репозитория
 
-В репозитории намеренно оставлены заглушки `USERNAME`. Их нужно заменить на ваш GitHub-логин до первого коммита:
+В этой копии уже подставлены `Virdly` и `zeduino-ide`: ссылки в `package.json`, `README`, `SECURITY.md`
+и `.github/ISSUE_TEMPLATE/config.yml` указывают на `https://github.com/Virdly/zeduino-ide`.
+Если вы форкнете проект, переименуете репозиторий или используете другой аккаунт — замените оба значения:
 
 | Файл | Что заменить |
 | --- | --- |
 | `package.json` | `author.url`, `repository.url`, `homepage`, `bugs.url` |
 | `README.md` | бейдж Build и команду `git clone` |
 | `README.en.md` | бейдж Build и команду `git clone` |
+| `SECURITY.md` | ссылка на Security Advisories |
 | `.github/ISSUE_TEMPLATE/config.yml` | ссылки на docs, discussions и Security Advisories |
 
-Поиск всех вхождений (PowerShell, из корня проекта):
+Проверка (PowerShell, из корня проекта):
 
 ```powershell
 Get-ChildItem -Recurse -File |
   Where-Object { $_.FullName -notmatch '\\(node_modules|dist|release|artifacts)\\' } |
-  Select-String -SimpleMatch 'USERNAME'
+  Select-String -SimpleMatch 'Virdly'
 ```
 
-Ожидаемо останутся только заглушки в документации, где `USERNAME` — пример. После замены проверьте, что в `package.json` корректны `author`, `repository`, `homepage`, `bugs`, а бейдж ведёт на `https://github.com/<логин>/zeduino-ide/actions/workflows/build.yml`.
-
-Имя репозитория в примерах — `zeduino-ide`. Если вы выберете другое, поменяйте его во всех ссылках.
+В `package.json` поля `author`, `repository`, `homepage`, `bugs` должны вести на ваш репозиторий,
+а бейдж — на `https://github.com/Virdly/zeduino-ide/actions/workflows/build.yml`.
 
 ## 2. Создайте репозиторий
 
@@ -50,7 +52,7 @@ git status --short
 
 ```powershell
 git commit -m "Initial commit: ZedArduino IDE 1.0.0"
-git remote add origin https://github.com/USERNAME/zeduino-ide.git
+git remote add origin https://github.com/Virdly/zeduino-ide.git
 git push -u origin main
 ```
 
@@ -145,7 +147,7 @@ git ls-files | Select-String -Pattern 'settings\.json|\.zip$|ZedArduinoIDE\.exe|
 6. Прикрепите файл `ZedArduinoIDE-1.0.0-win64.zip` в **Attach binaries**.
 7. Снимите галочку «This is a pre-release», если релиз стабильный, и опубликуйте.
 
-Проверка: ссылка `https://github.com/USERNAME/zeduino-ide/releases/tag/v1.0.0` открывается, zip скачивается и распаковывается, внутри есть `ZedArduinoIDE.exe`, `resources/app`, `LICENSES.chromium.html`.
+Проверка: ссылка `https://github.com/Virdly/zeduino-ide/releases/tag/v1.0.0` открывается, zip скачивается и распаковывается, внутри есть `ZedArduinoIDE.exe`, `resources/app`, `LICENSES.chromium.html`.
 
 ### Вариант B: автоматически через workflow
 
