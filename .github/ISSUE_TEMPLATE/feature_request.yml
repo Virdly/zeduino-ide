@@ -1,0 +1,48 @@
+name: 'Идея / Feature request'
+description: Предложить улучшение ZedArduino IDE
+title: '[Feature]: '
+labels: ['enhancement', 'needs-triage']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Задача
+      description: Какую проблему решает предложение?
+      placeholder: Неудобно каждый раз вручную ...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Предлагаемое решение
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативы
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Область
+      options:
+        - Редактор / автодополнение
+        - Компиляция / загрузка
+        - Платы и ядра
+        - Библиотеки
+        - Монитор порта / плоттер
+        - Чат с ИИ и инструменты
+        - Интерфейс / темы / язык
+        - Сборка, установка, обновления
+        - Другое
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Дополнительный контекст
+      description: Скриншоты, примеры, ссылки на похожие реализации.
+    validations:
+      required: false

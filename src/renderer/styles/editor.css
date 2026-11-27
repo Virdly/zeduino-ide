@@ -1,0 +1,334 @@
+/* =========================================================== editor tokens */
+/* Token colours are consumed by setup.ts through CSS variables. Both themes
+   are driven by the `data-theme` attribute that store.applyTheme() sets. */
+
+:root,
+:root[data-theme='dark'] {
+  --editor-syntax-comment: #6b7280;
+  --editor-syntax-doc-comment: #8b949e;
+  --editor-syntax-keyword: #c792ea;
+  --editor-syntax-control: #ff7b72;
+  --editor-syntax-string: #98c379;
+  --editor-syntax-number: #f78c6c;
+  --editor-syntax-atom: #ff9e64;
+  --editor-syntax-type: #ffcb6b;
+  --editor-syntax-function: #82aaff;
+  --editor-syntax-variable: #d7dae0;
+  --editor-syntax-property: #7fdbca;
+  --editor-syntax-operator: #89ddff;
+  --editor-syntax-bracket: #a6accd;
+  --editor-syntax-meta: #f07178;
+  --editor-syntax-invalid: #ff5370;
+  --editor-active-line: rgba(255, 255, 255, 0.035);
+  --editor-active-gutter: rgba(255, 255, 255, 0.06);
+  --editor-search-match: rgba(229, 192, 123, 0.24);
+  --editor-search-match-selected: rgba(76, 154, 255, 0.4);
+  --editor-search-match-border: rgba(229, 192, 123, 0.55);
+  --editor-snippet-field: rgba(76, 154, 255, 0.22);
+  --editor-placeholder: #5a6270;
+}
+
+:root[data-theme='light'] {
+  --editor-syntax-comment: #a0a1a7;
+  --editor-syntax-doc-comment: #8a8f98;
+  --editor-syntax-keyword: #a626a4;
+  --editor-syntax-control: #b76b00;
+  --editor-syntax-string: #3f8a3f;
+  --editor-syntax-number: #986801;
+  --editor-syntax-atom: #986801;
+  --editor-syntax-type: #b76b00;
+  --editor-syntax-function: #4078f2;
+  --editor-syntax-variable: #383a42;
+  --editor-syntax-property: #0184bc;
+  --editor-syntax-operator: #0184bc;
+  --editor-syntax-bracket: #696c77;
+  --editor-syntax-meta: #e45649;
+  --editor-syntax-invalid: #e45649;
+  --editor-active-line: rgba(0, 0, 0, 0.04);
+  --editor-active-gutter: rgba(0, 0, 0, 0.055);
+  --editor-search-match: rgba(234, 179, 8, 0.25);
+  --editor-search-match-selected: rgba(37, 99, 235, 0.3);
+  --editor-search-match-border: rgba(202, 138, 4, 0.6);
+  --editor-snippet-field: rgba(37, 99, 235, 0.16);
+  --editor-placeholder: #9aa0a8;
+}
+
+/* ============================================================== editor box */
+.editor-host {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  background: var(--editor-bg);
+  color: var(--editor-text);
+}
+
+.editor-host > .cm-editor {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: var(--editor-bg);
+  color: var(--editor-text);
+}
+
+.editor-host .cm-editor.cm-focused {
+  outline: none !important;
+}
+
+.editor-host .cm-scroller {
+  font-family: var(--editor-font-family);
+  font-size: var(--editor-font-size);
+  overflow: auto;
+}
+
+.editor-host .cm-content {
+  font-family: var(--editor-font-family);
+}
+
+.editor-host .cm-line {
+  padding-right: 12px;
+}
+
+.editor-host .cm-activeLine {
+  background: var(--editor-active-line) !important;
+}
+
+.editor-host .cm-activeLineGutter {
+  background: var(--editor-active-gutter) !important;
+}
+
+.cm-placeholder {
+  color: var(--editor-placeholder) !important;
+}
+
+/* ================================================================ gutters */
+.cm-gutters {
+  user-select: none;
+}
+
+.cm-lineNumbers .cm-gutterElement {
+  padding: 0 6px 0 8px;
+  min-width: 28px;
+}
+
+/* ============================================================== completions */
+.cm-tooltip-autocomplete {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cm-tooltip-autocomplete > ul {
+  max-height: 320px;
+  font-family: var(--editor-font-family);
+  font-size: 12.5px;
+  padding: 3px 0;
+}
+
+.cm-tooltip-autocomplete > ul > li {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 4px 8px !important;
+  line-height: 1.4;
+}
+
+.cm-tooltip-autocomplete > ul > completion-section {
+  display: list-item;
+  padding: 5px 8px 3px;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  pointer-events: none;
+}
+
+.cm-completionLabel {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-completionMatchedText {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 650;
+}
+
+.cm-completionDetail {
+  margin-left: auto !important;
+  max-width: 62%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding-left: 12px;
+}
+
+.cm-completionIcon {
+  width: 1.25em;
+  opacity: 0.85;
+  color: var(--text-muted);
+}
+
+.cm-completionIcon-function,
+.cm-completionIcon-method {
+  color: var(--editor-syntax-function);
+}
+
+.cm-completionIcon-variable,
+.cm-completionIcon-constant {
+  color: var(--editor-syntax-variable);
+}
+
+.cm-completionIcon-class,
+.cm-completionIcon-type,
+.cm-completionIcon-enum {
+  color: var(--editor-syntax-type);
+}
+
+.cm-completionIcon-keyword {
+  color: var(--editor-syntax-keyword);
+}
+
+.cm-completionIcon-property {
+  color: var(--editor-syntax-property);
+}
+
+.cm-completionIcon-text {
+  color: var(--text-muted);
+}
+
+.cm-tooltip-autocomplete > ul > li[aria-selected] {
+  background: var(--accent-soft) !important;
+  color: var(--text) !important;
+}
+
+.cm-completionInfo {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-family: var(--editor-font-family);
+  font-size: 11.5px;
+  padding: 6px 8px;
+  max-width: 360px;
+  word-break: break-word;
+}
+
+/* ============================================================ search panel */
+.cm-panels {
+  background: var(--bg-panel) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.cm-panel.cm-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  padding: 5px 30px 5px 8px !important;
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.cm-panel.cm-search input.cm-textfield {
+  height: 24px;
+  min-width: 132px;
+  padding: 0 7px;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  outline: none;
+}
+
+.cm-panel.cm-search input.cm-textfield:focus {
+  border-color: var(--accent-border) !important;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.cm-panel.cm-search .cm-button {
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px;
+  background: var(--bg-elevated) !important;
+  color: var(--text) !important;
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.cm-panel.cm-search .cm-button:hover {
+  background: var(--bg-hover) !important;
+  border-color: var(--bg-active) !important;
+}
+
+.cm-panel.cm-search label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.cm-panel.cm-search input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+
+.cm-panel.cm-search [name='close'] {
+  color: var(--text-muted);
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.cm-panel.cm-search [name='close']:hover {
+  color: var(--text);
+}
+
+/* ============================================================ search match */
+.cm-searchMatch {
+  background: var(--editor-search-match) !important;
+  outline: 1px solid var(--editor-search-match-border);
+  border-radius: 2px;
+}
+
+.cm-searchMatch.cm-searchMatch-selected {
+  background: var(--editor-search-match-selected) !important;
+}
+
+/* ============================================================ snippet fields */
+.cm-snippetField {
+  background: var(--editor-snippet-field);
+  border-radius: 2px;
+}
+
+.cm-snippetFieldPosition {
+  border-left: 2px solid var(--editor-cursor);
+  margin: 0 -1px;
+}
+
+/* =============================================================== selection */
+.cm-selectionBackground,
+.cm-editor.cm-focused .cm-selectionBackground,
+.cm-content ::selection {
+  background: var(--editor-selection) !important;
+}
+
+.cm-selectionMatch {
+  background: var(--accent-soft) !important;
+}

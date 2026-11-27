@@ -1,0 +1,75 @@
+{
+  "name": "zeduino-ide",
+  "productName": "ZedArduino IDE",
+  "version": "1.0.0",
+  "description": "Zed-style Arduino IDE: a fast editor with boards, compile/upload, serial monitor, library manager and an AI assistant",
+  "author": {
+    "name": "ZedArduino",
+    "url": "https://github.com/USERNAME"
+  },
+  "license": "MIT",
+  "main": "dist/main/index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USERNAME/zeduino-ide.git"
+  },
+  "homepage": "https://github.com/USERNAME/zeduino-ide#readme",
+  "bugs": {
+    "url": "https://github.com/USERNAME/zeduino-ide/issues"
+  },
+  "keywords": [
+    "arduino",
+    "arduino-ide",
+    "ide",
+    "editor",
+    "electron",
+    "codemirror",
+    "serial-monitor",
+    "arduino-cli",
+    "ai",
+    "windows"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "start": "electron .",
+    "typecheck": "tsc --noEmit",
+    "build:main": "node scripts/build-main.mjs",
+    "build:renderer": "vite build",
+    "build": "npm run build:main && npm run build:renderer",
+    "package": "node scripts/package.mjs",
+    "zip": "node scripts/make-zip.mjs",
+    "dist": "npm run build && npm run package",
+    "release": "npm run build && npm run package && npm run zip",
+    "check": "npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "^6.18.3",
+    "@codemirror/commands": "^6.7.1",
+    "@codemirror/lang-cpp": "^6.0.2",
+    "@codemirror/language": "^6.10.6",
+    "@codemirror/lint": "^6.8.4",
+    "@codemirror/search": "^6.5.8",
+    "@codemirror/state": "^6.5.0",
+    "@codemirror/view": "^6.35.0",
+    "@lezer/highlight": "^1.2.1",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "electron": "^33.2.0",
+    "esbuild": "^0.24.0",
+    "lucide-react": "^0.462.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "zustand": "^4.5.5"
+  }
+}

@@ -1,0 +1,46 @@
+ZedArduino IDE — как выложить на GitHub
+=======================================
+
+Кратко (подробно — docs/PUBLISHING.md):
+
+1. Замените USERNAME
+   В package.json (repository/homepage/bugs/author) и в README.md/README.en.md (ссылки и бейджи)
+   замените USERNAME на ваш GitHub-логин.
+
+2. Создайте репозиторий на GitHub
+   Например: zeduino-ide (пустой, без README/.gitignore).
+
+3. Инициализируйте git в этой папке
+   git init -b main
+   git add -A
+   git commit -m "Initial commit: ZedArduino IDE 1.0.0"
+   git remote add origin https://github.com/ВАШ_ЛОГИН/zeduino-ide.git
+   git push -u origin main
+
+4. Проверьте, что НЕ попало в git
+   - node_modules/ dist/ release/ artifacts/  (исключены в .gitignore)
+   - %APPDATA%\ZedArduino IDE\settings.json (никогда не копируйте: там ваш API-ключ)
+   - реальные ключи в docs/ и скриншотах
+
+5. Сделайте релиз с готовой программой
+   Вариант А (вручную):
+     GitHub → Releases → Draft a new release → Tag: v1.0.0
+     Прикрепите файл: artifacts/ZedArduinoIDE-1.0.0-win64.zip  (111 МБ, это Release asset, не коммит)
+   Вариант Б (автоматически):
+     git tag v1.0.0
+     git push origin v1.0.0
+     GitHub Actions соберёт и опубликует релиз (.github/workflows/release.yml).
+
+6. Настройки репозитория
+   - Description: "Zed-style editor with Arduino IDE tooling for Windows"
+   - Topics: arduino, arduino-ide, electron, typescript, codemirror, serial-monitor, ai
+   - Issues + Discussions: включить
+   - Social preview: docs/screenshots/editor-compile.jpg (или отдельная картинка 1280×640)
+
+Почему exe не в git:
+  ZedArduinoIDE.exe — 188 МБ, GitHub отклоняет файлы >100 МБ. Портативная папка лежит в artifacts/
+  (исключена из git) и загружается только как файл релиза.
+
+Перед публикацией ещё:
+  - проверьте, что в репозитории нет ваших токенов: grep -R "sk-" . (кроме README-заглушек)
+  - при желании подпишите сборку сертификатом (иначе SmartScreen будет предупреждать)

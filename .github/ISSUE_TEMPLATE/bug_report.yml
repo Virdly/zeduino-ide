@@ -1,0 +1,82 @@
+name: 'Ошибка / Bug report'
+description: Сообщить об ошибке в ZedArduino IDE
+title: '[Bug]: '
+labels: ['bug', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что помогаете проекту!
+
+        **Не прикладывайте API-ключи, пароли и личные данные.** Перед отправкой уберите их из логов и скриншотов.
+        Для проблем безопасности используйте [SECURITY.md](../blob/main/SECURITY.md), а не публичный issue.
+  - type: input
+    id: version
+    attributes:
+      label: Версия ZedArduino IDE
+      description: Настройки → внизу окна или «Помощь → О программе».
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Версия Windows
+      placeholder: Windows 11 23H2 x64
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Область
+      options:
+        - Редактор / автодополнение
+        - Компиляция / загрузка
+        - Платы и ядра
+        - Библиотеки
+        - Монитор порта
+        - Чат с ИИ
+        - Интерфейс / темы / язык
+        - Установка и запуск
+        - Другое
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги для воспроизведения
+      placeholder: |
+        1. Открыть папку ...
+        2. Выбрать плату ...
+        3. Нажать ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемое поведение
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактическое поведение
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Вывод arduino-cli / текст ошибки
+      description: Панель «Вывод» или «Проблемы». Без токенов и личных путей.
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Проверено
+      options:
+        - label: Я не приложил API-ключи, токены и пароли
+          required: true
+        - label: Я проверил, что проблема не описана в документации и не создавалась ранее
+          required: true
