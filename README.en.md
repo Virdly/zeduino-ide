@@ -16,7 +16,7 @@ Russian UI by default, English available; dark/light/fully custom themes.
 ## Features
 
 - **Editor** — C/C++/Arduino highlighting, VS Code-like file tree, tabs, find/replace, project search,
-  auto-save, indent settings, word wrap, inline compiler error highlighting.
+  auto-save, indent settings, word wrap, inline compiler error highlighting, **auto-format (Ctrl+T)**.
 - **Autocomplete** — instant and local: ~190 Arduino API entries (Serial, pinMode, analogRead, constants, types),
   functions/variables/objects/macros from **all project files**, snippets, any-word completion.
 - **Boards** — searchable board picker (hundreds of FQBNs), board options (processor/variant), auto-detected ports.
@@ -77,6 +77,7 @@ Examples: [`examples/`](examples/).
 | Save / save all | Ctrl+S / Ctrl+Alt+S |
 | Verify | Ctrl+B |
 | Upload | Ctrl+U |
+| Format code (auto-indent) | Ctrl+T |
 | Serial monitor | Ctrl+M |
 | AI chat | Ctrl+Shift+A |
 | Search in project | Ctrl+Shift+F |

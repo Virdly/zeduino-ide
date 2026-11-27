@@ -4,6 +4,8 @@ export const editor: Dict = {
   ru: {
     'editor.aria.editor': 'Редактор кода',
     'editor.placeholder': 'Начните печатать код…',
+    'editor.formatted': 'Код выровнен',
+    'editor.formatUnavailable': 'Форматирование доступно для файлов C/C++/Arduino',
 
     'editor.section.digital': 'Цифровые входы-выходы',
     'editor.section.analog': 'Аналоговые входы-выходы',
@@ -44,6 +46,8 @@ export const editor: Dict = {
   en: {
     'editor.aria.editor': 'Code editor',
     'editor.placeholder': 'Start typing code…',
+    'editor.formatted': 'Code formatted',
+    'editor.formatUnavailable': 'Formatting is available for C/C++/Arduino files',
 
     'editor.section.digital': 'Digital I/O',
     'editor.section.analog': 'Analog I/O',

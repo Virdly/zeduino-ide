@@ -980,6 +980,7 @@ export const useApp = create<AppStore>((set, get) => ({
         break
       case 'find':
       case 'replace':
+      case 'format':
         window.dispatchEvent(new CustomEvent('zeduino:editor', { detail: { action } }))
         break
       default:

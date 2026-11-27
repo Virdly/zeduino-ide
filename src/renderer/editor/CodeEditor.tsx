@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { Annotation, EditorState, Transaction, type Extension } from '@codemirror/state'
-import { EditorView, type ViewUpdate } from '@codemirror/view'
+import { EditorView, keymap, type ViewUpdate } from '@codemirror/view'
 import { redo, undo } from '@codemirror/commands'
 import { openSearchPanel } from '@codemirror/search'
 import { setDiagnostics, type Diagnostic } from '@codemirror/lint'
@@ -9,11 +9,13 @@ import { useApp } from '../state/store'
 import { useT } from '../i18n/useT'
 import {
   createEditorSetup,
+  isCodeFile,
   languageForPath,
   settingsEffects,
   uiExtensions,
   type EditorCompartments,
 } from './setup'
+import { formatEditorSelection } from './formatter'
 import { createCompletionBundle, type CompletionBundle } from './completions'
 import {
   refreshIndex,
@@ -107,6 +109,19 @@ export function CodeEditor({ path, value, onChange, onSave, onCursor }: CodeEdit
     }, delay)
   }
 
+  /** Ctrl+T: auto-format (re-indent) the selection or the whole C/C++ file. */
+  const runFormat = (view: EditorView): boolean => {
+    if (!isCodeFile(pathRef.current)) {
+      useApp.getState().showToast('warning', tRef.current('editor.formatUnavailable'))
+      return false
+    }
+    const applied = formatEditorSelection(view, settingsRef.current.tabSize)
+    if (applied) {
+      useApp.getState().showToast('success', tRef.current('editor.formatted'))
+    }
+    return applied
+  }
+
   /* Create the editor exactly once. Settings and language are reconfigured
      through compartments below, so the undo history survives. */
   useEffect(() => {
@@ -134,6 +149,13 @@ export function CodeEditor({ path, value, onChange, onSave, onCursor }: CodeEdit
 
     const extensions: Extension[] = [
       setup.extensions,
+      keymap.of([
+        {
+          key: 'Mod-t',
+          preventDefault: true,
+          run: (view) => runFormat(view),
+        },
+      ]),
       EditorView.updateListener.of((update: ViewUpdate) => {
         if (update.docChanged) {
           const text = update.state.doc.toString()
@@ -373,6 +395,10 @@ export function CodeEditor({ path, value, onChange, onSave, onCursor }: CodeEdit
           break
         case 'redo':
           redo(view)
+          view.focus()
+          break
+        case 'format':
+          runFormat(view)
           view.focus()
           break
         default:

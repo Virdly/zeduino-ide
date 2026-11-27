@@ -28,6 +28,16 @@ import { WorkspaceService } from './workspace'
 
 app.setName('ZedArduino IDE')
 
+// Development/testing convenience: run a second, isolated instance without
+// touching the user's settings and without fighting the single-instance lock.
+if (process.env.ZEDUINO_ISOLATED === '1') {
+  try {
+    app.setPath('userData', path.join(app.getPath('temp'), 'zeduino-ide-isolated'))
+  } catch {
+    /* ignore */
+  }
+}
+
 let mainWindow: BrowserWindow | null = null
 let workspace: WorkspaceService
 let arduino: ArduinoService
@@ -131,6 +141,7 @@ function buildMenu(): void {
         { type: 'separator' },
         { label: 'Найти', accelerator: 'CmdOrCtrl+F', click: () => send('find') },
         { label: 'Заменить', accelerator: 'CmdOrCtrl+H', click: () => send('replace') },
+        { label: 'Выровнять код', accelerator: 'CmdOrCtrl+T', click: () => send('format') },
         { label: 'Поиск по проекту', accelerator: 'CmdOrCtrl+Shift+F', click: () => send('search-project') },
       ],
     },
