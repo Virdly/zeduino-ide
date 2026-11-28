@@ -3,6 +3,7 @@ import { EVENT_CHANNELS, IPC, type ZedArduinoApi } from '../shared/api'
 import type {
   AiChunkEvent,
   AiDoneEvent,
+  AiPlan,
   AiToolCallsEvent,
   AppEventMap,
   CompileRequest,
@@ -106,6 +107,7 @@ const api: ZedArduinoApi = {
     onChunk: (cb) => on<AiChunkEvent>(EVENT_CHANNELS.aiChunk, cb),
     onTools: (cb) => on<AiToolCallsEvent>(EVENT_CHANNELS.aiTools, cb),
     onDone: (cb) => on<AiDoneEvent>(EVENT_CHANNELS.aiDone, cb),
+    onPlan: (cb) => on<AiPlan | null>(EVENT_CHANNELS.aiPlan, cb),
   },
   dirs: {
     list: (dirPath) => invoke(IPC.dirsList, dirPath),

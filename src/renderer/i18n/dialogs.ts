@@ -128,6 +128,15 @@ export const dialogs: Dict = {
     'dialog.ai.toolsHint':
       'Песочница: ИИ видит только папку открытого проекта и не может выйти за её пределы. Каждое изменение файла (создание, запись, удаление) выполняется только после вашего подтверждения.',
     'dialog.ai.systemPrompt': 'Системный промпт',
+    'dialog.ai.search': 'Поиск в интернете',
+    'dialog.ai.searchProvider': 'Поисковый сервис',
+    'dialog.ai.searchDuckDuckGo': 'DuckDuckGo (без ключа)',
+    'dialog.ai.searchBrave': 'Brave Search API',
+    'dialog.ai.searchTavily': 'Tavily',
+    'dialog.ai.searchProviderHint':
+      'DuckDuckGo работает без ключа, но может ограничивать запросы. Brave и Tavily требуют ключ.',
+    'dialog.ai.searchKey': 'Ключ поискового API',
+    'dialog.ai.searchKeyHint': 'Нужен только для Brave или Tavily; хранится локально.',
     'dialog.ai.systemPromptHint': 'Задаёт роль и стиль ассистента',
     'dialog.ai.resetPrompt': 'Сбросить к стандартному',
     'dialog.ai.promptReset': 'Системный промпт сброшен',
@@ -405,6 +414,15 @@ export const dialogs: Dict = {
     'dialog.ai.toolsHint':
       'Sandbox: the AI only sees the open project folder and cannot leave it. Every file change (create, write, delete) runs only after your approval.',
     'dialog.ai.systemPrompt': 'System prompt',
+    'dialog.ai.search': 'Web search',
+    'dialog.ai.searchProvider': 'Search provider',
+    'dialog.ai.searchDuckDuckGo': 'DuckDuckGo (no key)',
+    'dialog.ai.searchBrave': 'Brave Search API',
+    'dialog.ai.searchTavily': 'Tavily',
+    'dialog.ai.searchProviderHint':
+      'DuckDuckGo works without a key but may rate-limit requests. Brave and Tavily require an API key.',
+    'dialog.ai.searchKey': 'Search API key',
+    'dialog.ai.searchKeyHint': 'Only needed for Brave or Tavily; stored locally.',
     'dialog.ai.systemPromptHint': 'Defines the role and style of the assistant',
     'dialog.ai.resetPrompt': 'Reset to default',
     'dialog.ai.promptReset': 'System prompt reset',

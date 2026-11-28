@@ -2,6 +2,7 @@ import type {
   AiChatRequest,
   AiExecToolRequest,
   AiExecToolResult,
+  AiPlan,
   AppInfo,
   AppSettings,
   BoardDetails,
@@ -116,6 +117,7 @@ export interface ZedArduinoApi {
     onChunk(cb: (e: AppEventMap['ai:chunk']) => void): () => void
     onTools(cb: (e: AppEventMap['ai:tools']) => void): () => void
     onDone(cb: (e: AppEventMap['ai:done']) => void): () => void
+    onPlan(cb: (plan: AiPlan | null) => void): () => void
   }
   dirs: {
     list(dirPath: string): Promise<DirEntry[]>
@@ -188,6 +190,7 @@ export const EVENT_CHANNELS = {
   aiChunk: 'ai:chunk',
   aiTools: 'ai:tools',
   aiDone: 'ai:done',
+  aiPlan: 'ai:plan',
   projectChanged: 'project:changed',
   projectFsChanged: 'project:fs-changed',
   appMenu: 'app:menu',

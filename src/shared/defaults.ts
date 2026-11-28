@@ -48,6 +48,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     temperature: 0.3,
     toolsEnabled: true,
     maxTokens: 4096,
+    searchProvider: 'duckduckgo',
+    searchApiKey: '',
   },
   recentProjects: [],
   lastProject: null,

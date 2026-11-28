@@ -26,8 +26,13 @@ Russian UI by default, English available; dark/light/fully custom themes.
 - **Serial monitor** — baud rate, sending lines, line endings (`\n`, `\r\n`), auto-scroll, timestamps.
 - **Libraries** — search/install/remove, install from ZIP, **extra library folders** (listed and used for builds).
 - **AI chat** — any OpenAI-compatible endpoint: base URL, key, model, custom system prompt, streaming.
-- **AI tools** — `read_file`, `write_file`, `create_file`, `delete_file`, `list_dir`; every action requires
-  explicit approval and is sandboxed to the opened project folder.
+- **AI tools** — `read_file`, `edit_file` (targeted replacement), `write_file`, `create_file`, `delete_file`,
+  `list_dir` (recursive), `list_libraries`, `run_python`, `run_shell` (PowerShell/cmd), `web_search`,
+  `web_fetch`, `update_plan`; every action requires explicit approval, file access is limited to the project
+  and library folders.
+- **Task plan** — the model creates a plan with `update_plan` and the chat panel shows step statuses and progress.
+- **Library-aware AI** — the assistant can browse installed Arduino libraries, read their sources and explain
+  how to use them; editing a library still requires approval.
 - **Themes** — dark, light, custom (all 20 UI/editor colours), accent colour, UI scale.
 - **Languages** — Russian (default) and English, switch without restart.
 
@@ -100,8 +105,9 @@ shown in the library manager and in Settings → Arduino.
 
 - The API key is stored **locally only** in `%APPDATA%\ZedArduino IDE\settings.json`.
 - Requests go **only** to the endpoint you configure. No telemetry.
-- File tools run only after explicit approval and only inside the opened project folder
-  (path escapes are rejected in the main process).
+- Tools run only after explicit approval. File operations are limited to the opened project folder and
+  library folders; anything else is rejected by the main process.
+- `run_python` and `run_shell` only run after pressing "Approve" and are time-limited.
 - Details: [docs/AI.md](docs/AI.md).
 
 ## Data locations

@@ -13,21 +13,28 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  Circle,
   Copy,
   FilePlus2,
   FileText,
   FolderOpen,
+  Globe,
   KeyRound,
+  Library,
+  ListChecks,
   Pencil,
+  Play,
   RotateCcw,
   Send,
   Settings,
   Sparkles,
   Square,
+  SquareTerminal,
   Trash2,
+  Wrench,
   X,
 } from 'lucide-react'
-import type { AiToolCall, ChatMessage } from '../../shared/types'
+import type { AiPlan, AiToolCall, ChatMessage } from '../../shared/types'
 import type { TranslateFn } from '../i18n'
 import { useT } from '../i18n/useT'
 import { useApp } from '../state/store'
@@ -91,10 +98,16 @@ function friendlyToolError(t: TranslateFn, raw: string): string {
   return text
 }
 
+function requiresProject(name: string): boolean {
+  return !['web_search', 'web_fetch', 'list_libraries', 'update_plan'].includes(name)
+}
+
 function ToolIcon({ name }: { name: string }) {
   switch (name) {
     case 'read_file':
       return <FileText size={13} />
+    case 'edit_file':
+      return <Wrench size={13} />
     case 'write_file':
       return <Pencil size={13} />
     case 'create_file':
@@ -103,6 +116,17 @@ function ToolIcon({ name }: { name: string }) {
       return <Trash2 size={13} />
     case 'list_dir':
       return <FolderOpen size={13} />
+    case 'list_libraries':
+      return <Library size={13} />
+    case 'run_python':
+      return <Play size={13} />
+    case 'run_shell':
+      return <SquareTerminal size={13} />
+    case 'web_search':
+    case 'web_fetch':
+      return <Globe size={13} />
+    case 'update_plan':
+      return <ListChecks size={13} />
     default:
       return <Settings size={13} />
   }
@@ -250,6 +274,7 @@ function ToolCallCard({
   onReject,
 }: ToolCallCardProps) {
   const t = useT()
+  const projectRoot = useApp((state) => state.project?.root || '')
   const parsed = useMemo(() => parseArgsForDisplay(call.arguments), [call.arguments])
   const argsText = useMemo(
     () => (parsed.ok ? JSON.stringify(parsed.value, null, 2) : call.arguments || '{}'),
@@ -301,8 +326,34 @@ function ToolCallCard({
     resultIsError = !!resultMessage.error
   }
 
-  const targetPath =
+  const rawPath =
     parsed.ok && typeof parsed.value.path === 'string' ? parsed.value.path.trim() : ''
+  const command = parsed.ok && typeof parsed.value.command === 'string' ? parsed.value.command.trim() : ''
+  const code = parsed.ok && typeof parsed.value.code === 'string' ? parsed.value.code.trim() : ''
+  const query = parsed.ok && typeof parsed.value.query === 'string' ? parsed.value.query.trim() : ''
+  const fetchUrl = parsed.ok && typeof parsed.value.url === 'string' ? parsed.value.url.trim() : ''
+  const filter = parsed.ok && typeof parsed.value.filter === 'string' ? parsed.value.filter.trim() : ''
+  const targetValue = rawPath || command || fetchUrl || query || filter || (code ? code.split('\n')[0] : '')
+  const targetPreview = targetValue.length > 120 ? `${targetValue.slice(0, 120)}…` : targetValue
+  const absoluteOutside =
+    !!rawPath &&
+    (/^[a-zA-Z]:[\\/]/.test(rawPath) || rawPath.startsWith('/')) &&
+    !(projectRoot && rawPath.toLowerCase().startsWith(projectRoot.toLowerCase()))
+  const dangerous = call.name === 'delete_file' || call.name === 'run_shell' || call.name === 'run_python'
+  const targetLabel =
+    call.name === 'run_shell'
+      ? t('ai.tool.command')
+      : call.name === 'run_python'
+        ? t('ai.tool.script')
+        : call.name === 'web_search'
+          ? t('ai.tool.query')
+          : call.name === 'web_fetch'
+            ? t('ai.tool.url')
+            : call.name === 'list_libraries'
+              ? t('ai.tool.filter')
+              : call.name === 'update_plan'
+                ? t('ai.tool.plan')
+                : t('ai.tool.path')
   const shortResult =
     resultContent !== null &&
     !resultIsError &&
@@ -312,10 +363,10 @@ function ToolCallCard({
   const resultBodyVisible =
     resultContent !== null && (resultIsError || shortResult || resultExpanded)
   const actionsVisible =
-    active && (pending || running || !projectOpen || !parsed.ok)
+    active && (pending || running || (requiresProject(call.name) && !projectOpen) || !parsed.ok)
 
   return (
-    <div className={`ai-tool${call.name === 'delete_file' ? ' danger' : ''}`}>
+    <div className={`ai-tool${dangerous ? ' danger' : ''}`}>
       <div className="ai-tool-head">
         <span className="ai-tool-icon">
           <ToolIcon name={call.name} />
@@ -331,9 +382,26 @@ function ToolCallCard({
       </div>
 
       <div className="ai-tool-path">
-        <span className="ai-tool-path-label">{t('ai.tool.path')}:</span>
-        <code>{targetPath || t('ai.tool.root')}</code>
+        <span className="ai-tool-path-label">{targetLabel}:</span>
+        <code title={targetValue}>{targetPreview || t('ai.tool.root')}</code>
       </div>
+
+      {(dangerous || absoluteOutside) && (
+        <div className="ai-tool-warnings">
+          {dangerous && (
+            <span className="ai-tool-warn danger">
+              <AlertTriangle size={11} />
+              {t('ai.tool.danger')}
+            </span>
+          )}
+          {absoluteOutside && (
+            <span className="ai-tool-warn">
+              <Library size={11} />
+              {t('ai.tool.outsideProject')}
+            </span>
+          )}
+        </div>
+      )}
 
       <div className="ai-tool-args-head">
         {longArgs ? (
@@ -361,8 +429,8 @@ function ToolCallCard({
               <button
                 type="button"
                 className="btn small primary"
-                disabled={!projectOpen || !parsed.ok || !!batch?.executing}
-                title={!projectOpen ? t('ai.toolsDisabled') : undefined}
+                disabled={(requiresProject(call.name) && !projectOpen) || !parsed.ok || !!batch?.executing}
+                title={requiresProject(call.name) && !projectOpen ? t('ai.toolsDisabled') : undefined}
                 onClick={() => onApprove(call.id)}
               >
                 {t('ai.tool.approve')}
@@ -383,7 +451,7 @@ function ToolCallCard({
               {t('ai.tool.status.running')}
             </span>
           )}
-          {active && !projectOpen && (
+          {active && requiresProject(call.name) && !projectOpen && (
             <span className="ai-tool-note">{t('ai.toolsDisabled')}</span>
           )}
           {active && !parsed.ok && (
@@ -425,6 +493,55 @@ function ToolCallCard({
   )
 }
 
+function PlanPanel({ plan }: { plan: AiPlan | null }) {
+  const t = useT()
+  if (!plan || !plan.steps.length) return null
+  const done = plan.steps.filter((step) => step.status === 'done').length
+  const percent = Math.round((done / plan.steps.length) * 100)
+
+  return (
+    <section className="ai-plan" aria-label={t('ai.plan.title')}>
+      <div className="ai-plan-head">
+        <span className="ai-plan-head-icon">
+          <ListChecks size={14} />
+        </span>
+        <span className="ai-plan-head-title" title={plan.title}>
+          {plan.title}
+        </span>
+        <span className="badge">
+          {t('ai.plan.progress', { done, total: plan.steps.length })}
+        </span>
+      </div>
+      <div className="ai-plan-bar">
+        <div className="ai-plan-bar-fill" style={{ width: `${percent}%` }} />
+      </div>
+      <ol className="ai-plan-steps">
+        {plan.steps.map((step, index) => (
+          <li key={step.id} className={`ai-plan-step ${step.status}`}>
+            <span className="ai-plan-step-icon">
+              {step.status === 'done' ? (
+                <Check size={12} />
+              ) : step.status === 'in_progress' ? (
+                <span className="spinner" style={{ width: 10, height: 10 }} />
+              ) : step.status === 'failed' ? (
+                <X size={12} />
+              ) : (
+                <Circle size={8} />
+              )}
+            </span>
+            <div className="ai-plan-step-body">
+              <span className="ai-plan-step-title">
+                <span className="ai-plan-step-num">{index + 1}.</span> {step.title}
+              </span>
+              {step.note && <span className="ai-plan-step-note">{step.note}</span>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
 interface AssistantMessageProps {
   message: ChatMessage
   streaming: boolean
@@ -451,7 +568,7 @@ function AssistantMessage({
   onRejectAll,
 }: AssistantMessageProps) {
   const t = useT()
-  const calls = message.toolCalls ?? []
+  const calls = (message.toolCalls ?? []).filter((call) => call.name !== 'update_plan')
   const isStreaming = streaming && activeAssistantId === message.id
   const showTyping = isStreaming && !message.content
   const showCursor = isStreaming && !!message.content
@@ -459,6 +576,7 @@ function AssistantMessage({
   const pendingCount = batch
     ? calls.filter((call) => (batch.decisions[call.id] ?? 'pending') === 'pending').length
     : 0
+  const bulkNeedsProject = calls.some((call) => requiresProject(call.name))
 
   if (!message.content && !calls.length && !isStreaming) return null
 
@@ -503,8 +621,8 @@ function AssistantMessage({
                 <button
                   type="button"
                   className="btn small primary"
-                  disabled={!projectOpen || !!batch?.executing}
-                  title={t('ai.tool.approveAllHint')}
+                  disabled={(bulkNeedsProject && !projectOpen) || !!batch?.executing}
+                  title={bulkNeedsProject && !projectOpen ? t('ai.toolsDisabled') : t('ai.tool.approveAllHint')}
                   onClick={onApproveAll}
                 >
                   {t('ai.tool.approveAll')}
@@ -540,6 +658,7 @@ export function AIChatPanel() {
     stopping,
     activeAssistantId,
     pendingTools,
+    plan,
     error,
     setDraft,
     send,
@@ -725,6 +844,8 @@ export function AIChatPanel() {
       {apiKeyMissing && (
         <SetupCard baseUrl={settings.ai.baseUrl.trim()} model={model} onOpen={openSettings} />
       )}
+
+      <PlanPanel plan={plan} />
 
       <div className="ai-scroll-wrap">
         <div

@@ -106,6 +106,17 @@ export class ArduinoService {
     return path.join(this.userDataDir, 'build')
   }
 
+  /** Folders that contain Arduino libraries (sketchbook + extra folders). */
+  libraryRoots(): string[] {
+    const roots = new Set<string>()
+    const sketchbookLibs = path.join(this.userDir, 'libraries')
+    if (fs.existsSync(sketchbookLibs)) roots.add(path.resolve(sketchbookLibs))
+    for (const dir of settingsStore.get().arduino.libraryDirs) {
+      if (dir && fs.existsSync(dir)) roots.add(path.resolve(dir))
+    }
+    return [...roots]
+  }
+
   private async env(): Promise<NodeJS.ProcessEnv> {
     await fsp.mkdir(this.dataDir, { recursive: true })
     await fsp.mkdir(this.userDir, { recursive: true })

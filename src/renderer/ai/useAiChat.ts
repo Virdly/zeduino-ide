@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import type {
   AiChunkEvent,
   AiDoneEvent,
+  AiPlan,
   AiToolCall,
   AiToolCallsEvent,
   AiToolName,
@@ -40,6 +41,7 @@ export interface AiChatState {
   requestId: string | null
   activeAssistantId: string | null
   pendingTools: PendingToolBatch | null
+  plan: AiPlan | null
   error: AiChatError | null
 
   setDraft(text: string): void
@@ -83,6 +85,7 @@ export const useAiChatStore = create<AiChatState>((set, get) => ({
   requestId: null,
   activeAssistantId: null,
   pendingTools: null,
+  plan: null,
   error: null,
 
   setDraft: (text) => set({ draft: text }),
@@ -111,6 +114,7 @@ function ensureSubscribed(): void {
   window.api.ai.onChunk(handleChunk)
   window.api.ai.onTools(handleTools)
   window.api.ai.onDone(handleDone)
+  window.api.ai.onPlan(handlePlan)
 }
 
 /**
@@ -222,6 +226,7 @@ function doClear(): void {
   useAiChatStore.setState({
     messages: [],
     pendingTools: null,
+    plan: null,
     error: null,
     streaming: false,
     stopping: false,
@@ -279,6 +284,18 @@ function normalizeCalls(calls: AiToolCall[] | undefined): AiToolCall[] {
 }
 
 function handleTools(event: AiToolCallsEvent): void {
+  void handleToolsAsync(event)
+}
+
+function handlePlan(plan: AiPlan | null): void {
+  useAiChatStore.setState({ plan })
+}
+
+/**
+ * `update_plan` only changes the visible plan, so it is applied immediately;
+ * every other tool waits for an explicit user decision.
+ */
+async function handleToolsAsync(event: AiToolCallsEvent): Promise<void> {
   const state = useAiChatStore.getState()
   if (state.requestId !== event.requestId) return
   const messageId = state.activeAssistantId
@@ -286,23 +303,43 @@ function handleTools(event: AiToolCallsEvent): void {
   const calls = normalizeCalls(event.calls)
   if (!calls.length) return
 
+  const autoCalls = calls.filter((call) => call.name === 'update_plan')
+  const manualCalls = calls.filter((call) => call.name !== 'update_plan')
   const decisions: Record<string, ToolDecision> = {}
-  for (const call of calls) decisions[call.id] = 'pending'
+  for (const call of manualCalls) decisions[call.id] = 'pending'
 
+  const baseMessages = state.messages.map((message) =>
+    message.id === messageId ? { ...message, pending: false, toolCalls: calls } : message,
+  )
   useAiChatStore.setState({
     streaming: false,
     stopping: false,
-    messages: state.messages.map((message) =>
-      message.id === messageId ? { ...message, pending: false, toolCalls: calls } : message,
-    ),
-    pendingTools: {
-      messageId,
-      calls,
-      decisions,
-      results: {},
-      executing: false,
-    },
+    messages: baseMessages,
+    pendingTools: manualCalls.length
+      ? { messageId, calls: manualCalls, decisions, results: {}, executing: false }
+      : null,
   })
+
+  if (!autoCalls.length) return
+
+  const toolMessages: ChatMessage[] = []
+  for (const call of autoCalls) {
+    const result = await executeToolCall(call)
+    toolMessages.push({
+      id: uid('tool'),
+      role: 'tool',
+      toolCallId: call.id,
+      name: call.name,
+      content: result.content,
+      error: result.ok ? undefined : result.content,
+      createdAt: Date.now(),
+    })
+  }
+
+  const current = useAiChatStore.getState()
+  const messages = [...current.messages, ...toolMessages]
+  useAiChatStore.setState({ messages })
+  if (!current.pendingTools) startRequest(messages)
 }
 
 function handleDone(event: AiDoneEvent): void {

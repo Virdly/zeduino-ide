@@ -7,6 +7,7 @@ import {
   Eye,
   EyeOff,
   FolderOpen,
+  Globe,
   Keyboard,
   Languages,
   Moon,
@@ -868,10 +869,12 @@ function AiTab() {
   const showToast = useApp((s) => s.showToast)
   const ai = settings.ai
   const [showKey, setShowKey] = useState(false)
+  const [showSearchKey, setShowSearchKey] = useState(false)
 
   const baseUrl = useDraft(ai.baseUrl, (next) => apply({ ai: { baseUrl: next.trim() } }), 400)
   const apiKey = useDraft(ai.apiKey, (next) => apply({ ai: { apiKey: next.trim() } }), 400)
   const model = useDraft(ai.model, (next) => apply({ ai: { model: next.trim() } }), 400)
+  const searchKey = useDraft(ai.searchApiKey, (next) => apply({ ai: { searchApiKey: next.trim() } }), 400)
   const systemPrompt = useDraft(ai.systemPrompt, (next) => apply({ ai: { systemPrompt: next } }), 500)
 
   const resetPrompt = () => {
@@ -971,6 +974,52 @@ function AiTab() {
         <div className="notice">
           <AlertCircle size={14} />
           <span>{t('dialog.ai.toolsHint')}</span>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-title">
+          <Globe size={13} />
+          {t('dialog.ai.search')}
+        </div>
+        <div className="field">
+          <label className="field-label">{t('dialog.ai.searchProvider')}</label>
+          <select
+            className="select"
+            value={ai.searchProvider}
+            onChange={(event) =>
+              apply({ ai: { searchProvider: event.target.value as 'duckduckgo' | 'brave' | 'tavily' } })
+            }
+          >
+            <option value="duckduckgo">{t('dialog.ai.searchDuckDuckGo')}</option>
+            <option value="brave">{t('dialog.ai.searchBrave')}</option>
+            <option value="tavily">{t('dialog.ai.searchTavily')}</option>
+          </select>
+          <span className="field-hint">{t('dialog.ai.searchProviderHint')}</span>
+        </div>
+        <div className="field">
+          <label className="field-label">{t('dialog.ai.searchKey')}</label>
+          <div className="icon-field">
+            <input
+              className="input mono"
+              type={showSearchKey ? 'text' : 'password'}
+              value={searchKey.draft}
+              autoComplete="off"
+              spellCheck={false}
+              onChange={(event) => searchKey.setDraft(event.target.value)}
+              onBlur={searchKey.flush}
+            />
+            <button
+              type="button"
+              className="icon-btn"
+              title={showSearchKey ? t('dialog.ai.hideKey') : t('dialog.ai.showKey')}
+              aria-label={showSearchKey ? t('dialog.ai.hideKey') : t('dialog.ai.showKey')}
+              onClick={() => setShowSearchKey((value) => !value)}
+            >
+              {showSearchKey ? <EyeOff size={14} /> : <Eye size={14} />}
+            </button>
+          </div>
+          <span className="field-hint">{t('dialog.ai.searchKeyHint')}</span>
         </div>
       </div>
 

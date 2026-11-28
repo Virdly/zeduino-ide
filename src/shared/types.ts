@@ -70,6 +70,10 @@ export interface AiSettings {
   temperature: number
   toolsEnabled: boolean
   maxTokens: number
+  /** Web search provider for the `web_search` tool. */
+  searchProvider: 'duckduckgo' | 'brave' | 'tavily'
+  /** API key for Brave Search or Tavily (optional; DuckDuckGo needs no key). */
+  searchApiKey: string
 }
 
 export interface AppSettings {
@@ -282,7 +286,34 @@ export interface AiDoneEvent {
   finishReason?: string
 }
 
-export type AiToolName = 'read_file' | 'write_file' | 'create_file' | 'delete_file' | 'list_dir'
+export type AiToolName =
+  | 'read_file'
+  | 'write_file'
+  | 'create_file'
+  | 'delete_file'
+  | 'list_dir'
+  | 'edit_file'
+  | 'list_libraries'
+  | 'run_python'
+  | 'run_shell'
+  | 'web_search'
+  | 'web_fetch'
+  | 'update_plan'
+
+export type AiPlanStepStatus = 'pending' | 'in_progress' | 'done' | 'failed'
+
+export interface AiPlanStep {
+  id: string
+  title: string
+  status: AiPlanStepStatus
+  note?: string
+}
+
+export interface AiPlan {
+  title: string
+  steps: AiPlanStep[]
+  updatedAt: number
+}
 
 export interface AiExecToolRequest {
   name: AiToolName
@@ -331,6 +362,7 @@ export interface AppEventMap {
   'ai:chunk': AiChunkEvent
   'ai:tools': AiToolCallsEvent
   'ai:done': AiDoneEvent
+  'ai:plan': AiPlan | null
   'project:changed': ProjectInfo | null
   'project:fs-changed': { root: string; time: number }
   'app:menu': { action: string }

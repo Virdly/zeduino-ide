@@ -413,7 +413,7 @@ if (!gotLock) {
       (e) => emit('monitor:data', e),
       (e) => emit('monitor:state', e),
     )
-    ai = new AiService(emit, workspace)
+    ai = new AiService(emit, workspace, () => arduino.libraryRoots(), userData)
 
     // Restore previous project if it still exists
     const last = settingsStore.get().lastProject
