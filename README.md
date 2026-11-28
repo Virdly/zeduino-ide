@@ -2,7 +2,7 @@
 
 ![Build](https://github.com/Virdly/zeduino-ide/actions/workflows/build.yml/badge.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-success)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-AGPL--3.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-informational)
 ![Electron](https://img.shields.io/badge/Electron-33-47848F?logo=electron&logoColor=white)
 
@@ -160,7 +160,7 @@ Issues и pull request'ы приветствуются. См. [CONTRIBUTING](CON
 
 ## Лицензия
 
-MIT — см. [LICENSE](LICENSE). Сторонние компоненты: [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES.md).
+AGPL-3.0 — см. [LICENSE](LICENSE). Сторонние компоненты: [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES.md).
 
 Arduino® — торговая марка Arduino S.r.l. Zed — торговая марка Zed Industries, Inc.
 Проект не аффилирован ни с Arduino, ни с Zed.

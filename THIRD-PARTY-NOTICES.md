@@ -1,6 +1,6 @@
 # Сторонние компоненты и лицензии
 
-ZedArduino IDE распространяется под лицензией MIT (см. [LICENSE](LICENSE)). Ниже перечислены сторонние компоненты, которые используются в исходниках и/или входят в portable-сборку. Полные тексты лицензий находятся в пакетах (`node_modules/<пакет>/LICENSE`) и в файле `LICENSES.chromium.html`, который поставляется вместе с Electron.
+ZedArduino IDE распространяется под лицензией GNU AGPL-3.0 (см. [LICENSE](LICENSE)). Ниже перечислены сторонние компоненты, которые используются в исходниках и/или входят в portable-сборку. Полные тексты лицензий находятся в пакетах (`node_modules/<пакет>/LICENSE`) и в файле `LICENSES.chromium.html`, который поставляется вместе с Electron.
 
 ## 1. Runtime и библиотеки
 
@@ -38,7 +38,7 @@ ZedArduino IDE распространяется под лицензией MIT (�
 - Electron: `node_modules/electron/LICENSE` (в исходниках) и `LICENSE`/`LICENSES.chromium.html` в составе runtime.
 - Chromium и другие компоненты Electron: `LICENSES.chromium.html` (≈9 МБ) лежит в корне portable-сборки рядом с `ZedArduinoIDE.exe`; **не удаляйте его** при переупаковке.
 - Остальные пакеты: файлы `LICENSE`/`LICENSE.md` в соответствующих каталогах `node_modules`.
-- Лицензия проекта: [LICENSE](LICENSE) (MIT).
+- Лицензия проекта: [LICENSE](LICENSE) (GNU AGPL-3.0).
 
 ## 4. Торговые марки и отказ от связи
 
@@ -48,7 +48,7 @@ ZedArduino IDE — независимый проект. Он **не связан
 
 ## 5. Замечания по распространению
 
-- Проект использует MIT; сторонние лицензии не требуют раскрытия исходников ZedArduino IDE, кроме компонентов под GPL (в поставку не входят).
-- `scripts/package.mjs` копирует Electron runtime (включая `LICENSE` Electron и `LICENSES.chromium.html`) и файлы `README.md`, `HOW-TO-RUN.txt`, `install.ps1`, `uninstall.ps1`. Проектный `LICENSE` (MIT, copyright ZedArduino) и этот файл **не копируются** в `release\ZedArduinoIDE\` автоматически. Если уведомления должны быть в релизе, добавьте их вручную перед `npm run zip` или расширьте скрипт упаковки.
-- При распространении portable-сборки сохраняйте `LICENSES.chromium.html`; для соблюдения MIT приложите также текст [LICENSE](LICENSE) с copyright-строкой проекта.
+- Проект распространяется под AGPL-3.0: при распространении сборки или предоставлении доступа к ней по сети необходимо предоставить соответствующий исходный код. Сторонние компоненты сохраняют свои лицензии (в основном MIT).
+- `scripts/package.mjs` копирует Electron runtime (включая `LICENSE` Electron и `LICENSES.chromium.html`), а также файлы проекта `README.md`, `HOW-TO-RUN.txt`, `install.ps1`, `uninstall.ps1`, `LICENSE` (AGPL-3.0) и `THIRD-PARTY-NOTICES.md`.
+- При распространении portable-сборки сохраняйте `LICENSES.chromium.html`. Для соблюдения AGPL-3.0 приложите текст [LICENSE](LICENSE) и обеспечьте доступ к соответствующему исходному коду (репозиторий).
 - Вопросы лицензирования — через Issue/Discussions проекта (без публикации секретов).

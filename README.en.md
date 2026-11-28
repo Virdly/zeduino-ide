@@ -2,7 +2,7 @@
 
 ![Build](https://github.com/Virdly/zeduino-ide/actions/workflows/build.yml/badge.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-success)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-AGPL--3.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-informational)
 
 **A fast Zed-style editor and Arduino IDE tooling in one program.**
@@ -134,7 +134,7 @@ Issues and pull requests are welcome. See [CONTRIBUTING](CONTRIBUTING.md), [SECU
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Third-party notices: [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES.md).
+AGPL-3.0 — see [LICENSE](LICENSE). Third-party notices: [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES.md).
 
 Arduino® is a trademark of Arduino S.r.l. Zed is a trademark of Zed Industries, Inc.
 This project is not affiliated with Arduino or Zed.
