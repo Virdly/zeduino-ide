@@ -8,19 +8,19 @@
 и `.github/ISSUE_TEMPLATE/config.yml` указывают на `https://github.com/Virdly/zeduino-ide`.
 Если вы форкнете проект, переименуете репозиторий или используете другой аккаунт — замените оба значения:
 
-  Файл   Что заменить  
-  ---   ---  
-  `package.json`   `author.url`, `repository.url`, `homepage`, `bugs.url`  
-  `README.md`   бейдж Build и команду `git clone`  
-  `README.en.md`   бейдж Build и команду `git clone`  
-  `SECURITY.md`   ссылка на Security Advisories  
-  `.github/ISSUE_TEMPLATE/config.yml`   ссылки на docs, discussions и Security Advisories  
+| Файл | Что заменить |
+| --- | --- |
+| `package.json` | `author.url`, `repository.url`, `homepage`, `bugs.url` |
+| `README.md` | бейдж Build и команду `git clone` |
+| `README.en.md` | бейдж Build и команду `git clone` |
+| `SECURITY.md` | ссылка на Security Advisories |
+| `.github/ISSUE_TEMPLATE/config.yml` | ссылки на docs, discussions и Security Advisories |
 
 Проверка (PowerShell, из корня проекта):
 
 ```powershell
-Get-ChildItem -Recurse -File  
-  Where-Object { $_.FullName -notmatch '\\(node_modules dist release artifacts)\\' }  
+Get-ChildItem -Recurse -File |
+  Where-Object { $_.FullName -notmatch '\\(node_modules|dist|release|artifacts)\\' } |
   Select-String -SimpleMatch 'Virdly'
 ```
 
@@ -85,7 +85,7 @@ Thumbs.db
 
 ```powershell
 git status --ignored --short
-git ls-files   Select-String -Pattern 'settings\.json \.zip$ ZedArduinoIDE\.exe node_modules'
+git ls-files | Select-String -Pattern 'settings\.json|\.zip$|ZedArduinoIDE\.exe|node_modules'
 ```
 
 Последняя команда не должна ничего находить. `artifacts/` — это подготовленная сборка, она принципиально не коммитится (см. раздел 5).
@@ -121,11 +121,11 @@ git ls-files   Select-String -Pattern 'settings\.json \.zip$ ZedArduinoIDE\.exe 
 
 Портативная сборка — это не исходники, а бинарный артефакт:
 
-  Файл   Размер   Коммитить?  
-  ---   ---   ---  
-  `ZedArduinoIDE.exe`   188 784 128 байт (≈180 МиБ / ≈188,8 МБ)   **Нет**  
-  `artifacts/ZedArduinoIDE-1.0.0-win64.zip`   116 445 346 байт (≈111,1 МиБ)   **Нет**  
-  `release/ZedArduinoIDE-1.0.0-win64.zip` (после `npm run zip`)   тот же порядок   **Нет**  
+| Файл | Размер | Коммитить? |
+| --- | --- | --- |
+| `ZedArduinoIDE.exe` | 188 784 128 байт (≈180 МиБ / ≈188,8 МБ) | **Нет** |
+| `artifacts/ZedArduinoIDE-1.0.0-win64.zip` | 116 445 346 байт (≈111,1 МиБ) | **Нет** |
+| `release/ZedArduinoIDE-1.0.0-win64.zip` (после `npm run zip`) | тот же порядок | **Нет** |
 
 Причины:
 
@@ -240,7 +240,7 @@ GitHub показывает превью ссылки в соцсетях и м�
 ## 11. Чек-лист безопасности перед публикацией
 
 - [ ] `settings.json` не в репозитории (он лежит в `%APPDATA%`, а не в проекте).
-- [ ] Поиск секретов: `git grep -n -I -E "sk-[A-Za-z0-9]{20,} ghp_ github_pat_ Bearer [A-Za-z0-9]"` — реальных ключей быть не должно. Заглушка `sk-REPLACE_ME` в `docs/AI.md` безопасна и ожидаема.
+- [ ] Поиск секретов: `git grep -n -I -E "sk-[A-Za-z0-9]{20,}|ghp_|github_pat_|Bearer [A-Za-z0-9]"` — реальных ключей быть не должно. Заглушка `sk-REPLACE_ME` в `docs/AI.md` безопасна и ожидаема.
 - [ ] В `docs/` и README нет личных путей, email, имён и внутренних адресов.
 - [ ] В скриншотах нет ключей, токенов, серийных номеров и личных файлов.
 - [ ] `git status --ignored` не показывает случайно добавленных бинарников; `git ls-files` не содержит `node_modules`, `dist`, `release`, `artifacts`, `*.zip`, `*.exe`.
@@ -253,14 +253,14 @@ GitHub показывает превью ссылки в соцсетях и м�
 
 ## 12. Лицензионные требования
 
-  Компонент   Лицензия   Как распространяется  
-  ---   ---   ---  
-  Код ZedArduino IDE   MIT (`LICENSE`)   исходники + бинарник  
-  Electron / Chromium   MIT + BSD-подобные и сторонние лицензии Chromium   входят в portable-сборку; `LICENSES.chromium.html` лежит рядом с `ZedArduinoIDE.exe`  
-  React, CodeMirror 6, Lezer, Zustand, `serialport`, esbuild, Vite   MIT   входят в сборку  
-  `lucide-react`   ISC   входит в сборку  
-  TypeScript   Apache-2.0   инструмент сборки, в runtime не входит  
-  `arduino-cli`   **GPLv3**   **не включён в поставку**: IDE находит установленный CLI или скачивает его отдельно по действию пользователя  
+| Компонент | Лицензия | Как распространяется |
+| --- | --- | --- |
+| Код ZedArduino IDE | AGPL-3.0 (`LICENSE`) | исходники + бинарник; при сетевом использовании исходники должны быть доступны |
+| Electron / Chromium | MIT + BSD-подобные и сторонние лицензии Chromium | входят в portable-сборку; `LICENSES.chromium.html` лежит рядом с `ZedArduinoIDE.exe` |
+| React, CodeMirror 6, Lezer, Zustand, `serialport`, esbuild, Vite | MIT | входят в сборку |
+| `lucide-react` | ISC | входит в сборку |
+| TypeScript | Apache-2.0 | инструмент сборки, в runtime не входит |
+| `arduino-cli` | **GPLv3** | **не включён в поставку**: IDE находит установленный CLI или скачивает его отдельно по действию пользователя |
 
 Важно:
 
